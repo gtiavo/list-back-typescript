@@ -34,12 +34,18 @@ async login({email, password}:AuthLoginDTo) {
    const newUser = new AuthLoginDTo(email, password);
    await this.fieldsValidate.validateOrReject(newUser);
 
-   const user = await this.authRepository.findOne({ 
+   let user = await this.authRepository.findOne({ 
    where: {email: newUser.email}, 
-   select:{email: true, id: true, fullName: true, password: true}
+   select:{email: true, id: true, fullName: true, password: true, isActive: true}
 });
 
+
    if( !user || !bcrypt.compareSync(password, user.password)) throw new BadRequestResponse('email or password invalid');
+
+   if(!user.isActive){
+    user = await this.authRepository.preload({id: user.id, isActive: true});
+    await this.authRepository.save(user);
+   }
 
    delete user.password;
 
