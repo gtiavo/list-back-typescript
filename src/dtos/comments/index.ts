@@ -1,0 +1,1 @@
+export { CommentCreateDto } from './CommentCreateDto';
