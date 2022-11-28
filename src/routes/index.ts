@@ -3,6 +3,7 @@ import { AuthRoute } from './AuthRoute';
 import { ListRoute } from './ListRoute';
 import { UserRoute } from './UserRoute';
 import { GuestRoute } from './GuestRoute';
+import { CommentRoute } from './CommentRoute';
 
 export class PathRoutes {
 
@@ -11,6 +12,7 @@ export class PathRoutes {
     listPath:Router;
     userPath:Router;
     guestPath:Router;
+    commentPath:Router;
 
     constructor(){
         this.router = Router();
@@ -18,6 +20,7 @@ export class PathRoutes {
         this.listPath = new ListRoute().router;
         this.userPath = new UserRoute().router;
         this.guestPath = new GuestRoute().router;
+        this.commentPath = new CommentRoute().router;
         this.paths();
     }
 
@@ -26,6 +29,7 @@ export class PathRoutes {
         this.router.use('/tolist', this.listPath);
         this.router.use('/users', this.userPath);
         this.router.use('/guest-users', this.guestPath);
+        this.router.use('/comments', this.commentPath);
     }
 }
 
