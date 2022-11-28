@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { AuthRoute } from './AuthRoute';
 import { ListRoute } from './ListRoute';
 import { UserRoute } from './UserRoute';
+import { GuestRoute } from './GuestRoute';
 
 export class PathRoutes {
 
@@ -9,12 +10,14 @@ export class PathRoutes {
     authPath:Router;
     listPath:Router;
     userPath:Router;
+    guestPath:Router;
 
     constructor(){
         this.router = Router();
         this.authPath = new AuthRoute().router;
         this.listPath = new ListRoute().router;
         this.userPath = new UserRoute().router;
+        this.guestPath = new GuestRoute().router;
         this.paths();
     }
 
@@ -22,6 +25,7 @@ export class PathRoutes {
         this.router.use('/auth', this.authPath);
         this.router.use('/tolist', this.listPath);
         this.router.use('/users', this.userPath);
+        this.router.use('/guest-users', this.guestPath);
     }
 }
 

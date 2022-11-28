@@ -15,7 +15,7 @@ export class Passport {
 
     strategy() {
        return new Strategy(this.opts, async( payload, done) => {
-            const user: UserEntity = await this.authRepository.findOne({where:{ id: payload.id }, select:{fullName:true, email:true, id:true, roles:true, isActive:true }});
+            const user: UserEntity = await this.authRepository.findOne({where:{ id: payload.id }, select:{fullName:true, email:true, id:true, roles:true, isActive:true, userToken:true }});
             if(!user) {
                 return done(null, false);
             }
