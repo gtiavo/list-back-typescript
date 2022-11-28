@@ -15,6 +15,7 @@ export class CommentRoute {
      commentRoutes() {
 
          this.router.get('/', this.commentController.findAll );
+         this.router.post('/', this.commentController.create );
 
      }
 
