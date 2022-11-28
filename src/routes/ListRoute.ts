@@ -20,6 +20,8 @@ export class ListRoute {
         this.router.get('/:termParams', this.listController.findOne);
         this.router.put('/:termParams', this.listController.update);
         this.router.delete('/:termParams', this.listController.delete);
+        this.router.get('/guest-user/:idUserParams', this.listController.guestListFind );
+        this.router.get('/guest-user/:idUserParams/:termParams', this.listController.guestListFindOne );
         
     }
 

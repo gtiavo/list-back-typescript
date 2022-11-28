@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { DataSource } from "typeorm";
 import { UserEntity } from "../entities/UserEntity";
 import { ListEntity } from '../entities/ListEntity';
+import { GuestEntity } from '../entities/GuestEntity';
 
 export const AppDataSource = new DataSource({
 
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
     username: "root",
     password: "",
     database: "list-back",
-    entities: [UserEntity, ListEntity],
+    entities: [UserEntity, ListEntity, GuestEntity],
     synchronize: true,
     subscribers: [],
     migrations: [],

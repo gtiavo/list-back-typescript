@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Generated } from 'typeorm';
 import { ListEntity } from './ListEntity';
 import { UserRole } from '../helpers/enum/enum-roles';
+import { GuestEntity } from './GuestEntity';
 
 @Entity({name: "users"})
 export class UserEntity {
@@ -32,12 +33,23 @@ export class UserEntity {
     })
     roles: UserRole
 
+    @Column('uuid')
+    @Generated('uuid')
+    userToken: string
+
     @OneToMany(
         () => ListEntity,
         ( list ) => list.user,
         {lazy: true}
     )
     list: ListEntity;
+
+    @OneToMany(
+        () => GuestEntity,
+        ( guest ) => guest.user,
+        {lazy: true}
+    )
+    guest: GuestEntity;
 
 
 }
