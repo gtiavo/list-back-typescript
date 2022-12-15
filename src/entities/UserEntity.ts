@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Generated } from 'ty
 import { ListEntity } from './ListEntity';
 import { UserRole } from '../helpers/enum/enum-roles';
 import { GuestEntity } from './GuestEntity';
+import { CommnentEntity } from './CommentEntity';
 
 @Entity({name: "users"})
 export class UserEntity {
@@ -50,6 +51,13 @@ export class UserEntity {
         {lazy: true}
     )
     guest: GuestEntity;
+
+    @OneToMany(
+        () => CommnentEntity,
+        (comment) => comment.user,
+        {lazy:true} 
+    )
+    comment:CommnentEntity
 
 
 }
