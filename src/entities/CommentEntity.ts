@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { UserEntity } from './UserEntity';
+import { ListEntity } from './ListEntity';
 
 
 @Entity({name: 'comments'})
@@ -16,5 +18,19 @@ export class CommnentEntity {
     updateAt: Date
     @DeleteDateColumn()
     deleteAt: Date
+
+    @ManyToOne(
+        () => UserEntity,
+        (user) => user.comment,
+        {lazy: true, eager:true}
+        )
+    user:UserEntity;
+
+    @ManyToOne( 
+        () => ListEntity,
+        ( list ) => list.comment,
+        {lazy:true}
+         )
+    list: ListEntity;
 
 }

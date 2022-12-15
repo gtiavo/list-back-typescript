@@ -8,16 +8,13 @@ import { NotFoundResponse } from "../_HTTP-response/errors";
 import { ListUpdateDto } from '../dtos/list/ListUpdateDto';
 import { UserEntity } from '../entities/UserEntity';
 import { BadRequestResponse } from '../_HTTP-response/errors/client-error-responses';
-import { UserModel } from './UserModel';
 import { GuestModel } from './GuestModel';
 
 
 export class ListModel {
 
     private readonly listRepository: Repository<ListEntity> = AppDataSource.getRepository(ListEntity);
-    private readonly userRepository: Repository<UserEntity> = AppDataSource.getRepository(UserEntity);
     private readonly  fieldsValidate:FieldsValidate = new FieldsValidate();
-    // private readonly userModels: UserModel = new UserModel();
     private readonly  guestModels: GuestModel = new GuestModel()
 
     async create({instructions, title, category,description}: ListCreateDto, user:UserEntity ):Promise<ListEntity> {
@@ -98,6 +95,17 @@ export class ListModel {
         const list = await this.listRepository.findOne({where: {id: reqParams.termParams, user:{id:reqParams.idUserParams}}});
         if(!list)throw new NotFoundResponse('list not found');
         return list;
+
+    }
+
+    async oneListUserComments({idListParams}:any, user:UserEntity) {
+
+        const list = await this.listRepository.findOne({where:{id:idListParams}});
+        if(!list)throw new NotFoundResponse('list not found');
+        const userList = await Promise.resolve(list.user);
+        await this.guestModels.guestUserComment(user, userList);
+        
+        return list
 
     }
 

@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserEntity } from "./UserEntity";
+import { CommnentEntity } from './CommentEntity';
 
 @Entity({name: 'list'})
 export class ListEntity {
@@ -19,6 +20,12 @@ export class ListEntity {
     @Column('text')
     category: string;
 
+    @CreateDateColumn()
+    createAt: Date
+    @UpdateDateColumn()
+    updateAt: Date
+    @DeleteDateColumn()
+    deleteAt: Date
 
     @ManyToOne(
         () => UserEntity,
@@ -27,13 +34,12 @@ export class ListEntity {
     )
     user: UserEntity;
 
-    @CreateDateColumn()
-    createAt: Date
-    @UpdateDateColumn()
-    updateAt: Date
-    @DeleteDateColumn()
-    deleteAt: Date
-
+    @OneToMany(
+        () => CommnentEntity,
+        (comment) => comment.list,
+        {lazy: true}
+    )
+    comment: CommnentEntity;
 
 
 }

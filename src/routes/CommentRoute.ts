@@ -16,9 +16,9 @@ export class CommentRoute {
      commentRoutes() {
 
          this.router.use(passport.authenticate('jwt', {session: false}));
-         this.router.get('/', this.commentController.findAll );
+         this.router.get('/one-list/:idListParams', this.commentController.findAll );
          this.router.get('/:id', this.commentController.findOne );
-         this.router.post('/', this.commentController.create );
+         this.router.post('/:idListParams', this.commentController.create );
          this.router.put('/:id', this.commentController.update );
          this.router.delete('/:id', this.commentController.delete );
 
