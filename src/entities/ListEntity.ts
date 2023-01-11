@@ -37,9 +37,9 @@ export class ListEntity {
     @OneToMany(
         () => CommnentEntity,
         (comment) => comment.list,
-        {lazy: true}
+        {lazy: true, eager: true}
     )
-    comment: CommnentEntity;
+    comment: CommnentEntity[];
 
 
 }
