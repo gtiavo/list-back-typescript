@@ -1,7 +1,10 @@
 
 
 export enum UserRole {
-    ADMIN = 'admin',
+    ADMIN = 'admin'
+}
+
+export enum GuestUserRole {
     USER = 'user',
-    GUEST = 'guest'
+    SUPER_USER = 'superUser'
 }

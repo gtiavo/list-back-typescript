@@ -14,10 +14,11 @@ export class GuestModel {
 
     async createRelations(idUserParams: any, user: UserEntity):Promise<GuestEntity> {
         
-        const {guestUser, userToken} = await this.findOneRelation(idUserParams, user);
+        const {guestUser, userToken, fullName} = await this.findOneRelation(idUserParams, user);
         if(guestUser) throw new BadRequestResponse('This relationship already exists');
 
-        const guestRelation = this.guestRepository.create({ guestUserToken:userToken, user: user});
+
+        const guestRelation = this.guestRepository.create({guestUserName:fullName,guestUserToken:userToken, user: user});
         return this.guestRepository.save(guestRelation);
 
     }
@@ -46,11 +47,11 @@ export class GuestModel {
 
     async findOneRelation(idUserParams: any, user: UserEntity){
     
-        const {userToken} = await this.userModels.findOne(idUserParams);
+        const {userToken, fullName} = await this.userModels.findOne(idUserParams);
         if(userToken === user.userToken ) throw new BadRequestResponse("Can't create this relationship");
 
         const guestUser = await this.guestRepository.findOne({where:{ guestUserToken: userToken, user:{id: user.id} }});
-        return {userToken, guestUser}
+        return {userToken, guestUser, fullName}
     }
 
     async getGuestUsers(user: UserEntity):Promise<GuestEntity[]> {

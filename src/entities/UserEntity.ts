@@ -13,8 +13,10 @@ export class UserEntity {
     @Column("text")
     fullName: string;
 
-    @Column("text", {
-        unique: true
+    @Column({
+        type: "varchar",
+        length: 150,
+        unique: true,
     })
     email: string;
 
@@ -30,7 +32,7 @@ export class UserEntity {
 
     @Column('enum', {
         enum: UserRole ,
-        default: UserRole.USER
+        default: UserRole.ADMIN
     })
     roles: UserRole
 

@@ -9,6 +9,7 @@ import { ListUpdateDto } from '../dtos/list/ListUpdateDto';
 import { UserEntity } from '../entities/UserEntity';
 import { BadRequestResponse } from '../_HTTP-response/errors/client-error-responses';
 import { GuestModel } from './GuestModel';
+import { CommnentEntity } from '../entities/CommentEntity';
 
 
 export class ListModel {
@@ -37,11 +38,14 @@ export class ListModel {
 
     }
 
-    async getAll( { id }: UserEntity  ):Promise<ListEntity[]> {
-        return await this.listRepository.find({where: { user:{ id } }});
+    async getAll( { id }: UserEntity  ):Promise<any[]> {
+         const lists = await this.listRepository.find({where: { user:{ id } }});
+         const newList = await Promise.all(lists.map(async(list) => this.ListModel(list)))
+
+         return newList;
     }
 
-    async getOne({termParams}:any, idUser: UserEntity ):Promise<ListEntity> {
+    async getOne({termParams}:any, idUser: UserEntity ):Promise<any> {
 
         const { id } = idUser;
 
@@ -51,9 +55,11 @@ export class ListModel {
 
         if(!uuidValidate(termParams)) list = await this.listRepository.findOne({where: {title: termParams, user:{ id }}});
 
-        if(!list) throw new NotFoundResponse('La lista no se encuentra');
+        if(!list) throw new NotFoundResponse('List not found');
 
-        return list;
+        const newList = await this.ListModel(list, true);
+
+        return newList;
     }
 
     async update(termParams: any, idUser: UserEntity , {title, instructions, description, category}:ListUpdateDto):Promise<any> {
@@ -107,6 +113,24 @@ export class ListModel {
         
         return list
 
+    }
+
+    async ListModel( list:ListEntity, comments:boolean = false ) {
+        const {  id, title, category, description, instructions, createAt, updateAt, user, comment } = list;
+
+        return {
+            id,
+            title,
+            category,
+            description,
+            instructions,
+            createAt,
+            updateAt, 
+            userList: await Promise.resolve(user).then(value => ({id: value.id, fullname: value.fullName})),
+            commentsList: !comments ? undefined : await Promise.all((await Promise.resolve(comment)).map( 
+                async (value) => ({id: value.id, message: value.message, userComment: await Promise.resolve(value.user).then(item => ({id: item.id, fullName: item.fullName}))})
+                ))
+        }
     }
 
 }
